@@ -6,6 +6,9 @@ import { handleAsyncError } from "../../handler/handleAsyncError.js";
 
 const addCategory = handleAsyncError (async (req,res,next)=>{
     req.body.slug = slugify(req.body.name);
+    if(req.file){
+        req.body.image = req.file.filename;
+    }
     let x = new Category(req.body);
     let added = await x.save();
     res.json({message:"Category added",data:added});

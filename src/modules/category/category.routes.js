@@ -1,12 +1,13 @@
 import {Router} from "express";
 import { addCategory , deleteCategory , updateCategory , getCategories , getCategory } from "./category.controller.js";
+import { uploadSignal } from "../../utils/fileUpload.js";
 
 
 const subCategoryRoutes=Router();
 
 
 subCategoryRoutes.route("/")
-         .post(addCategory)
+         .post(uploadSignal("image"),addCategory)
          .get( getCategories);
 
 

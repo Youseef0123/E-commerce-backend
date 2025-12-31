@@ -1,4 +1,6 @@
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 import { connection } from './db/connections.js';
 import { Bootstrap } from './src/modules/Bootstrap.js';
 import { globalError } from './src/utils/globalError.js';
@@ -13,6 +15,7 @@ const port = process.env.PORT || 3000;
 
 connection();
 app.use(express.json()); 
+app.use("/uploads",express.static("uploads"));
 Bootstrap(app);
 
 app.get("/", (req, res) => {
@@ -20,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use((req,res,next)=>{
-  next(new AppError(`invalid route: ${req.originalUrl}`,404));
+  next(new AppError(`invaliond route: ${req.originalUrl}`,404));
 })
 
 app.use(globalError) 

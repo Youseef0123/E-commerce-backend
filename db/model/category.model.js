@@ -1,5 +1,5 @@
-import mongoose, { Types } from "mongoose";
-
+import mongoose, { Schema, Types } from "mongoose";
+import dotenv from "dotenv";
 const categorySchema = new mongoose.Schema({
     name:{
         type:String,
@@ -15,6 +15,9 @@ const categorySchema = new mongoose.Schema({
         lowercase:true,
         required:[true,"slug is required"],
     },
+    image:{
+        type:String
+    },
     Category:{
         type:Types.ObjectId,
         ref:"Category" 
@@ -27,5 +30,24 @@ const categorySchema = new mongoose.Schema({
     versionKey:false
 })
 
+categorySchema.post("save",function(doc){
+    if(doc.image){
+        doc.image=process.env.BASEURL+"uploads/"+doc.image;
+    }
+})
+
+categorySchema.post("find",function(docs){
+    docs.forEach(doc=>{
+        if(doc.image){
+            doc.image=process.env.BASEURL+"uploads/"+doc.image;
+        }
+    })
+})
+
+categorySchema.post("findOne",function(doc){
+    if(doc && doc.image){
+        doc.image=process.env.BASEURL+"uploads/"+doc.image;
+    }
+})
 
 export const Category = mongoose.model("Category", categorySchema);
